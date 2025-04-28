@@ -361,7 +361,7 @@ Resources:
               Service: codebuild.amazonaws.com
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AmazonECR-FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonECRFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
       Policies:
         - PolicyName: CodeBuildServiceRolePolicy
@@ -558,6 +558,7 @@ Outputs:
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
     Export:
       Name: !Sub ${EnvironmentName}-EcrRepositoryUri
+
 
 
 
