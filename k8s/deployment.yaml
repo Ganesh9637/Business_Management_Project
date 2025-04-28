@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: business-project
+  labels:
+    app: business-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: business-project
+  template:
+    metadata:
+      labels:
+        app: business-project
+    spec:
+      containers:
+      - name: business-project
+        image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/business-project:${IMAGE_TAG}
+        ports:
+        - containerPort: 2330
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: SPRING_DATASOURCE_URL
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: jdbc-url
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 2330
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 2330
+          initialDelaySeconds: 30
+          periodSeconds: 5

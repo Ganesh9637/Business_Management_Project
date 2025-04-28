@@ -1,0 +1,31 @@
+schemaVersion: 2.0.0
+metadata:
+  name: business-management-app
+  version: 1.0.0
+  displayName: Business Management Web Application
+  description: Spring Boot application for business management
+components:
+  - name: dev
+    container:
+      image: public.ecr.aws/aws-mde/universal-image:latest
+      memoryLimit: 4Gi
+      mountSources: true
+      env:
+        - name: JAVA_HOME
+          value: /usr/lib/jvm/java-17-openjdk
+commands:
+  - id: install
+    exec:
+      component: dev
+      commandLine: "./mvnw dependency:go-offline"
+      workingDir: ${PROJECT_SOURCE}
+  - id: build
+    exec:
+      component: dev
+      commandLine: "./mvnw package -DskipTests"
+      workingDir: ${PROJECT_SOURCE}
+  - id: test
+    exec:
+      component: dev
+      commandLine: "./mvnw test"
+      workingDir: ${PROJECT_SOURCE}
