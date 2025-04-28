@@ -519,7 +519,7 @@ Resources:
                 Owner: yourusername
                 Repo: business-project
                 Branch: main
-                OAuthToken: '{{resolve:secretsmanager:GitHubToken:SecretString:token}}'
+                OAuthToken: ''
               OutputArtifacts:
                 - Name: SourceCode
         - Name: Build
@@ -565,6 +565,7 @@ Outputs:
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
     Export:
       Name: !Sub ${EnvironmentName}-EcrRepositoryUri
+
 
 
 
