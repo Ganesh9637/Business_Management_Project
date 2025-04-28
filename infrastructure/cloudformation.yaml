@@ -121,6 +121,19 @@ Resources:
         - Key: kubernetes.io/role/internal-elb
           Value: 1
   
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-PrivateSubnet2
+        - Key: kubernetes.io/role/internal-elb
+          Value: 1
+  
   # NAT Gateway and Elastic IPs
   NatGateway1EIP:
     Type: AWS::EC2::EIP
@@ -224,6 +237,12 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       SubnetId: !Ref PrivateSubnet1
+  
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      SubnetId: !Ref PrivateSubnet2
   
   # EKS Cluster
   EksClusterRole:
@@ -539,6 +558,8 @@ Outputs:
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
     Export:
       Name: !Sub ${EnvironmentName}-EcrRepositoryUri
+
+
 
 
 

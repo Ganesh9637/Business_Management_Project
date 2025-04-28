@@ -69,7 +69,7 @@ fi
 # Deploy CloudFormation stack
 echo "Deploying CloudFormation stack..."
 aws cloudformation deploy \
-  --template-file infrastructure/cloudformation.yaml \
+  --template-file ../infrastructure/cloudformation.yaml \
   --stack-name $STACK_NAME \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
